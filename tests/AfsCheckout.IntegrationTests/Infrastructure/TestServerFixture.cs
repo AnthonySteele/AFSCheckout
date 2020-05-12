@@ -3,12 +3,11 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CheckoutApi.IntegrationTests.Infrastructure
 {
-    public class TestServerFixture : IDisposable
+    public sealed class TestServerFixture : IDisposable
     {
         public TestServer TestServer { get; private set; }
         public HttpClient Client { get; private set; }
@@ -44,17 +43,8 @@ namespace CheckoutApi.IntegrationTests.Infrastructure
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Client?.Dispose();
-                TestServer?.Dispose();
-            }
+            Client?.Dispose();
+            TestServer?.Dispose();
         }
     }
 }
