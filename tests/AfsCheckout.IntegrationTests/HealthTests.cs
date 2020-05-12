@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace CheckoutApi.IntegrationTests
 {
-    public class HealthTest
+    public class HealthTests
     {
         [Test]
         public async Task HealthCheckReturnsOk()
@@ -13,6 +13,15 @@ namespace CheckoutApi.IntegrationTests
 
             Assert.That(response.IsSuccessStatusCode, Is.True);
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        }
+
+        [Test]
+        public async Task RandomPathIsNotFound()
+        {
+            var response = await TestFixture.Client.GetAsync("/somepath/thatisnot/used");
+
+            Assert.That(response.IsSuccessStatusCode, Is.False);
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         }
     }
 }
