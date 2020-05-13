@@ -7,7 +7,11 @@ namespace CheckoutApi.Bank
     {
         public Task<BankResponse> ProcessPayment(PaymentRequest request)
         {
-            var result = new BankResponse();
+            var result = new BankResponse
+            {
+                Success = true
+            };
+
             return Task.FromResult(result);
         }
     }
