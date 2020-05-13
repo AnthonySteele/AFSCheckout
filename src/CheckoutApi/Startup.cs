@@ -1,4 +1,5 @@
 using CheckoutApi.Bank;
+using CheckoutApi.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,8 @@ namespace CheckoutApi
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IBankService, FakeBankService>();
+            services.AddSingleton<IPaymentRepository, FakePaymentRepository>();
+
             services
                 .AddMvc()
                 .AddControllersAsServices();

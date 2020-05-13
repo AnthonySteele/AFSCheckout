@@ -24,16 +24,7 @@ namespace CheckoutApi.IntegrationTests
         [Test]
         public async Task ValidPaymentDataIsAccepted()
         {
-            var payment = new PaymentRequest
-            {
-                NameOnCard = "Mr A Test",
-                CardNumber = "1234123412341234",
-                CardCvv = "123",
-                CardExpiryMonth = 04,
-                CardExpiryYear = 24,
-                Currency = "GBP",
-                Amount = 100m
-            };
+            var payment = PaymentData.ValidPaymentRequest();
 
             var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString(payment));
 
@@ -41,7 +32,8 @@ namespace CheckoutApi.IntegrationTests
 
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            Assert.That(responseContent, Is.Empty);
+            Assert.That(responseContent, Is.Not.Empty);
+            Assert.That(responseContent, Does.Contain("{\"success\":true,"));
         }
     }
 }

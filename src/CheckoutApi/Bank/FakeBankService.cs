@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using CheckoutApi.Controllers;
 
@@ -9,7 +10,8 @@ namespace CheckoutApi.Bank
         {
             var result = new BankResponse
             {
-                Success = true
+                Success = true,
+                TransactionId = Guid.NewGuid()
             };
 
             return Task.FromResult(result);
