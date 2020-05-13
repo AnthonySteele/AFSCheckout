@@ -3,6 +3,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CheckoutApi.IntegrationTests.Infrastructure
@@ -20,6 +21,11 @@ namespace CheckoutApi.IntegrationTests.Infrastructure
 
             TestServer = BuildTestServer();
             Client = CreateClient();
+        }
+
+        public object GetRequiredService(Type type)
+        {
+            return TestServer.Host.Services.GetRequiredService(type);
         }
 
         private HttpClient CreateClient()

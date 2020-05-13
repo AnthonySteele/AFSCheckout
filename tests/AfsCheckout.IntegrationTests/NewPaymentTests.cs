@@ -26,6 +26,7 @@ namespace CheckoutApi.IntegrationTests
         {
             var payment = new PaymentRequest
             {
+                NameOnCard = "Mr A Test",
                 CardNumber = "1234123412341234",
                 CardCvv = "123",
                 CardExpiryMonth = 04,

@@ -5,12 +5,16 @@ namespace CheckoutApi.Controllers
     public class PaymentRequest
     {
         [Required]
+        [StringLength(128, MinimumLength = 1)]
+        public string NameOnCard { get; set; } = string.Empty;
+
+        [Required]
         [StringLength(16, MinimumLength = 16)]
-        public string? CardNumber { get; set; }
+        public string CardNumber { get; set; } = string.Empty;
 
         [Required]
         [StringLength(3, MinimumLength = 3)]
-        public string? CardCvv { get; set; }
+        public string CardCvv { get; set; } = string.Empty;
 
         [Required]
         [Range(1, 12)]

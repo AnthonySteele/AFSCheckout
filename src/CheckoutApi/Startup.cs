@@ -1,3 +1,4 @@
+using CheckoutApi.Bank;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +18,10 @@ namespace CheckoutApi
 
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddTransient<IBankService, FakeBankService>();
+            services
+                .AddMvc()
+                .AddControllersAsServices();
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)

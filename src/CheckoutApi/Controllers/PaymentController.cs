@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using CheckoutApi.Bank;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -7,14 +9,16 @@ namespace CheckoutApi.Controllers
     [Route("[controller]")]
     public class PaymentController: ControllerBase
     {
+        private readonly IBankService _bankService;
         private readonly ILogger<PaymentController> _logger;
 
-        public PaymentController(ILogger<PaymentController> logger)
+        public PaymentController(IBankService bankService, ILogger<PaymentController> logger)
         {
+            _bankService = bankService;
             _logger = logger;
         }
 
-        public IActionResult Put([FromBody]PaymentRequest request)
+        public async Task<IActionResult> Put([FromBody]PaymentRequest request)
         {
             if (request == null)
             {
@@ -22,6 +26,8 @@ namespace CheckoutApi.Controllers
             }
 
             _logger.LogInformation($"Payment request for {request.Amount} {request.Currency} recieved");
+
+            await _bankService.ProcessPayment(request);
 
             return Ok();
         }
