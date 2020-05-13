@@ -19,10 +19,16 @@ payment requests and accepting payment responses to and from the acquiring bank.
 
 ## HTTP Endpoints
 
-* GET `/health` A simple "liveness check" that responds OK when the app is running.
-* PUT `/payments`
+* `GET /health` A simple "liveness check" that responds OK when the app is running.
+* `PUT /payments`
+* `GET /swagger/` Swagger Ui
+* `GET /swagger/v1/swagger.json` swagger data on endpoints
 
 ## Other features
+
+* Swagger metadata and UI using [NSwag](https://github.com/RicoSuter/NSwag)
+
+## Build features
 
 *  Checks at compile time configured in `Directory.Build.props`
   * Warnings as errors
@@ -33,7 +39,6 @@ payment requests and accepting payment responses to and from the acquiring bank.
 
 ## Todo:
 
-Swagger
 Prometheus Monitoring
 
 Shortcomings:
@@ -42,6 +47,12 @@ Potential data loss if the bank api fails badly (e.g. timeout or http 500 respon
 Way to mitigate this likely involces:
  * Save the payment data locally _before_ sending it. This means using a locally generated id as key, not depending on the the transaction id that the bank returns.
  * make use of an [Idempotency key](https://stripe.com/docs/api/idempotent_requests) to make it safe for a client to repeat failed requests by inspecting the saved data and deciding what to do.
+ 
+ 
+No API client. One can be generated from metadata using [NSwag](https://github.com/RicoSuter/NSwag).
+
+No docker support. Not hard for an expert to add.
+
  
 Anthony Steele 
 2020-05-12

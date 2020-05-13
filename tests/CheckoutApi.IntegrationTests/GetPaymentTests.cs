@@ -33,10 +33,7 @@ namespace CheckoutApi.IntegrationTests
             var knownId = await GetValidPaymentId();
             var response = await TestFixture.Client.GetAsync($"/payment/{knownId}");
 
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-
-            var content = await response.Content.ReadAsStringAsync();
-            Assert.That(content, Is.Not.Empty);
+            await HttpAssert.IsOkWithJsonContent(response);
         }
 
         private static async Task<Guid> GetValidPaymentId()

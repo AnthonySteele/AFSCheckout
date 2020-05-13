@@ -1,9 +1,11 @@
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using CheckoutApi.Bank;
 using CheckoutApi.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NSwag.Annotations;
 
 namespace CheckoutApi.Controllers
 {
@@ -25,6 +27,9 @@ namespace CheckoutApi.Controllers
             _logger = logger;
         }
 
+        [HttpPut]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(BankResponse))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, null)]
         public async Task<IActionResult> Put([FromBody]PaymentRequest request)
         {
             if (request == null)
@@ -55,7 +60,11 @@ namespace CheckoutApi.Controllers
             return response;
         }
 
+        [HttpGet]
         [Route("{id}")]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(PaymentData))]
+        [SwaggerResponse(HttpStatusCode.NotFound, null)]
+        [SwaggerResponse(HttpStatusCode.BadRequest, null)]
         public IActionResult Get(string id)
         {
             if (string.IsNullOrWhiteSpace(id))

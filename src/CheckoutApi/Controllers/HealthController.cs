@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 
 namespace Checkout.Controllers
 {
@@ -7,6 +9,7 @@ namespace Checkout.Controllers
     public class HealthController : ControllerBase
     {
         [HttpGet]
+        [SwaggerResponse(HttpStatusCode.OK, null)]
         public IActionResult Get()
         {
             return Ok();

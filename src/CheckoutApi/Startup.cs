@@ -22,6 +22,12 @@ namespace CheckoutApi
             services.AddTransient<IBankService, FakeBankService>();
             services.AddSingleton<IPaymentRepository, FakePaymentRepository>();
 
+            services.AddOpenApiDocument(config =>
+            {
+                config.Title = "Payment API";
+                config.Description = "AFS payment api demo";
+            });
+
             services
                 .AddMvc()
                 .AddControllersAsServices();
@@ -42,6 +48,9 @@ namespace CheckoutApi
             {
                 endpoints.MapControllers();
             });
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
         }
     }
 }
