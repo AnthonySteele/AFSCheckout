@@ -24,7 +24,7 @@ namespace CheckoutApi.UnitTests.Bank
         {
             var service = BuildPaymentService();
 
-            var response = await service.ProcessPayment(PaymentData.ValidPaymentRequest());
+            var response = await service.ProcessPayment(PaymentRequestBuilder.ValidPaymentRequest());
 
             Assert.That(response.Success, Is.True);
             Assert.That(response.TransactionId, Is.Not.EqualTo(Guid.Empty));
@@ -34,7 +34,7 @@ namespace CheckoutApi.UnitTests.Bank
         public async Task PaymentCanFail()
         {
             var service = BuildPaymentService();
-            var request = PaymentData.ValidPaymentRequest();
+            var request = PaymentRequestBuilder.ValidPaymentRequest();
             request.NameOnCard = "Mr A Fail";
 
             var response = await service.ProcessPayment(request);
@@ -48,7 +48,7 @@ namespace CheckoutApi.UnitTests.Bank
         {
             var service = BuildPaymentService();
 
-            var response = await service.ProcessPayment(PaymentData.ValidPaymentRequest());
+            var response = await service.ProcessPayment(PaymentRequestBuilder.ValidPaymentRequest());
 
             var payment = service.GetPaymentById(response.TransactionId);
 
@@ -58,7 +58,7 @@ namespace CheckoutApi.UnitTests.Bank
         private static IPaymentService BuildPaymentService()
         {
             return new PaymentService(
-                new FakeBankService(), new FakePaymentRepository(),
+                new FakeAquiringBankService(), new FakePaymentRepository(),
                 NullLogger<PaymentService>.Instance);
         }
     }

@@ -13,7 +13,7 @@ namespace CheckoutApi.Controllers
         public string CardNumber { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(3, MinimumLength = 3)]
+        [StringLength(4, MinimumLength = 3)]
         public string CardCvv { get; set; } = string.Empty;
 
         [Required]
@@ -29,6 +29,7 @@ namespace CheckoutApi.Controllers
         public decimal Amount { get; set; }
 
         [Required]
-        public string? Currency { get; set; }
+        [StringLength(3, MinimumLength = 3)]
+        public string Currency { get; set; } = string.Empty;
     }
 }

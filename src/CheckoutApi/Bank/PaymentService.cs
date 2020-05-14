@@ -9,12 +9,12 @@ namespace CheckoutApi.Bank
 {
     public class PaymentService : IPaymentService
     {
-        private readonly IBankService _bankService;
+        private readonly IAquiringBankService _bankService;
         private readonly IPaymentRepository _paymentRepository;
         private readonly ILogger<PaymentService> _logger;
 
         public PaymentService(
-            IBankService bankService,
+            IAquiringBankService bankService,
             IPaymentRepository paymentRepository,
             ILogger<PaymentService> logger)
         {
@@ -51,7 +51,7 @@ namespace CheckoutApi.Bank
             {
                 TransactionId = response.TransactionId,
                 Status = response.Success ? PaymentStatus.Accepted : PaymentStatus.Rejected,
-                CardNumber = request.CardNumber,
+                CardNumber = request.CardNumber.Substring(0, 4),
                 NameOnCard = request.NameOnCard,
                 Amount = request.Amount,
                 Created = DateTimeOffset.UtcNow

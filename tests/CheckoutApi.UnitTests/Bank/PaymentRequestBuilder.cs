@@ -1,8 +1,8 @@
 using CheckoutApi.Controllers;
 
-namespace CheckoutApi.IntegrationTests
+namespace CheckoutApi.UnitTests.Bank
 {
-    public static class PaymentData
+    public static class PaymentRequestBuilder
     {
         public static PaymentRequest ValidPaymentRequest()
         {

@@ -11,7 +11,7 @@ namespace CheckoutApi.UnitTests.Bank
         [Test]
         public async Task CanProcessPayment()
         {
-            var bankService = new FakeBankService();
+            var bankService = new FakeAquiringBankService();
             var payment = new PaymentRequest();
 
             var result = await bankService.ProcessPayment(payment);
@@ -24,7 +24,7 @@ namespace CheckoutApi.UnitTests.Bank
         [Test]
         public async Task TwoPaymentsHaveDifferentIds()
         {
-            var bankService = new FakeBankService();
+            var bankService = new FakeAquiringBankService();
             var payment1 = new PaymentRequest();
             var payment2 = new PaymentRequest();
 

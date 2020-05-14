@@ -4,7 +4,7 @@ using CheckoutApi.Controllers;
 
 namespace CheckoutApi.Bank
 {
-    public class FakeBankService : IBankService
+    public class FakeAquiringBankService : IAquiringBankService
     {
         public Task<BankResponse> ProcessPayment(PaymentRequest request)
         {

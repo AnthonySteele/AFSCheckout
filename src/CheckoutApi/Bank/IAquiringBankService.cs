@@ -3,7 +3,7 @@ using CheckoutApi.Controllers;
 
 namespace CheckoutApi.Bank
 {
-    public interface IBankService
+    public interface IAquiringBankService
     {
         Task<BankResponse> ProcessPayment(PaymentRequest request);
     }

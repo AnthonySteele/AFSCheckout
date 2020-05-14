@@ -18,7 +18,7 @@ namespace CheckoutApi.IntegrationTests
         [Test]
         public async Task ValidPaymentDataIsAccepted()
         {
-            var payment = PaymentData.ValidPaymentRequest();
+            var payment = PaymentRequestBuilder.ValidPaymentRequest();
 
             var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
 
@@ -33,7 +33,7 @@ namespace CheckoutApi.IntegrationTests
         [Test]
         public async Task BankRejection()
         {
-            var payment = PaymentData.ValidPaymentRequest();
+            var payment = PaymentRequestBuilder.ValidPaymentRequest();
             payment.NameOnCard = "Mr A fail";
 
             var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
@@ -48,7 +48,7 @@ namespace CheckoutApi.IntegrationTests
         [Test]
         public async Task PaymentDataWithoutNameIsNotAccepted()
         {
-            var payment = PaymentData.ValidPaymentRequest();
+            var payment = PaymentRequestBuilder.ValidPaymentRequest();
             payment.NameOnCard = string.Empty;
 
             var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
@@ -59,7 +59,7 @@ namespace CheckoutApi.IntegrationTests
         [Test]
         public async Task PaymentDataWithInvalidCreditCardNumberIsNotAccepted()
         {
-            var payment = PaymentData.ValidPaymentRequest();
+            var payment = PaymentRequestBuilder.ValidPaymentRequest();
             payment.CardNumber = "nosuch";
 
             var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
@@ -67,11 +67,23 @@ namespace CheckoutApi.IntegrationTests
             await HttpAssert.IsBadRequestWithJsonContent(response);
         }
 
+        [Test]
+        public async Task AmexCardNumberIsAccepted()
+        {
+            var payment = PaymentRequestBuilder.ValidPaymentRequest();
+            payment.CardNumber = "378282246310005";
+            payment.CardCvv = "1234";
+
+            var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        }
 
         [Test]
         public async Task PutIsNotAccepted()
         {
-            var payment = PaymentData.ValidPaymentRequest();
+            var payment = PaymentRequestBuilder.ValidPaymentRequest();
 
             var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString(payment));
 
