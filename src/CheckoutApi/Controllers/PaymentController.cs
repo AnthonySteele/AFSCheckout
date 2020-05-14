@@ -19,10 +19,10 @@ namespace CheckoutApi.Controllers
             _paymentService = paymentService;
         }
 
-        [HttpPut]
+        [HttpPost]
         [SwaggerResponse(HttpStatusCode.OK, typeof(BankResponse))]
         [SwaggerResponse(HttpStatusCode.BadRequest, null)]
-        public async Task<IActionResult> Put([FromBody]PaymentRequest request)
+        public async Task<IActionResult> Post([FromBody]PaymentRequest request)
         {
             if (request == null)
             {
@@ -30,7 +30,6 @@ namespace CheckoutApi.Controllers
             }
 
             var response = await _paymentService.ProcessPayment(request);
-
             return Ok(response);
         }
 

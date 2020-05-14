@@ -40,7 +40,7 @@ namespace CheckoutApi.IntegrationTests
         {
             var payment = PaymentData.ValidPaymentRequest();
 
-            var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString(payment));
+            var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 

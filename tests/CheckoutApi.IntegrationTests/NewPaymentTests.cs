@@ -1,6 +1,5 @@
 using System.Net;
 using System.Threading.Tasks;
-using CheckoutApi.Controllers;
 using CheckoutApi.IntegrationTests.Infrastructure;
 using NUnit.Framework;
 
@@ -11,7 +10,7 @@ namespace CheckoutApi.IntegrationTests
         [Test]
         public async Task NoPaymentDataIsBadRequest()
         {
-            var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString("{}"));
+            var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString("{}"));
 
             await HttpAssert.IsBadRequestWithJsonContent(response);
         }
@@ -21,7 +20,7 @@ namespace CheckoutApi.IntegrationTests
         {
             var payment = PaymentData.ValidPaymentRequest();
 
-            var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString(payment));
+            var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
@@ -37,7 +36,7 @@ namespace CheckoutApi.IntegrationTests
             var payment = PaymentData.ValidPaymentRequest();
             payment.NameOnCard = "Mr A fail";
 
-            var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString(payment));
+            var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -52,7 +51,7 @@ namespace CheckoutApi.IntegrationTests
             var payment = PaymentData.ValidPaymentRequest();
             payment.NameOnCard = string.Empty;
 
-            var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString(payment));
+            var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
 
             await HttpAssert.IsBadRequestWithJsonContent(response);
         }
@@ -63,9 +62,20 @@ namespace CheckoutApi.IntegrationTests
             var payment = PaymentData.ValidPaymentRequest();
             payment.CardNumber = "nosuch";
 
-            var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString(payment));
+            var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
 
             await HttpAssert.IsBadRequestWithJsonContent(response);
+        }
+
+
+        [Test]
+        public async Task PutIsNotAccepted()
+        {
+            var payment = PaymentData.ValidPaymentRequest();
+
+            var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString(payment));
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed));
         }
     }
 }

@@ -3,7 +3,8 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace CheckoutApi.IntegrationTests
-{    public class MetricsTests
+{
+    public class MetricsTests
     {
         [Test]
         public async Task CanLoadMetrics()
