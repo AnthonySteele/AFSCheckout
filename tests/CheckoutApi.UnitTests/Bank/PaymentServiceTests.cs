@@ -53,6 +53,22 @@ namespace CheckoutApi.UnitTests.Bank
             var payment = service.GetPaymentById(response.TransactionId);
 
             Assert.That(payment, Is.Not.Null);
+            Assert.That(payment!.Status, Is.EqualTo(PaymentStatus.Accepted));
+        }
+
+        [Test]
+        public async Task FailedPaymentReturnsData()
+        {
+            var service = BuildPaymentService();
+
+            var request = PaymentRequestBuilder.ValidPaymentRequest();
+            request.NameOnCard = "Mr A Fail";
+            var response = await service.ProcessPayment(request);
+
+            var payment = service.GetPaymentById(response.TransactionId);
+
+            Assert.That(payment, Is.Not.Null);
+            Assert.That(payment!.Status, Is.EqualTo(PaymentStatus.Rejected));
         }
 
         private static IPaymentService BuildPaymentService()

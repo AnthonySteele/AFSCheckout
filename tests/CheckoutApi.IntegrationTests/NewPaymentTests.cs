@@ -75,7 +75,6 @@ namespace CheckoutApi.IntegrationTests
             payment.CardCvv = "1234";
 
             var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
-            var responseContent = await response.Content.ReadAsStringAsync();
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }

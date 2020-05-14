@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using CheckoutApi.Controllers;
 using CheckoutApi.Repository;
 using Microsoft.Extensions.Logging;
-using Prometheus;
 
 namespace CheckoutApi.Bank
 {
