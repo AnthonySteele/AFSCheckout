@@ -6,6 +6,7 @@ namespace CheckoutApi.Repository
     {
         public Guid TransactionId { get; set; }
         public string CardNumber { get; set; } = string.Empty;
+        public string NameOnCard { get; set; } = string.Empty;
 
         public decimal Amount { get; set; }
         public PaymentStatus Status { get; set; }

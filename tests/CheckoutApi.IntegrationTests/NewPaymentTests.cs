@@ -13,12 +13,7 @@ namespace CheckoutApi.IntegrationTests
         {
             var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString("{}"));
 
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-
-            Assert.That(responseContent, Is.Not.Empty);
-            Assert.That(responseContent, Does.Contain("One or more validation errors occurred."));
+            await HttpAssert.IsBadRequestWithJsonContent(response);
         }
 
         [Test]
@@ -34,6 +29,43 @@ namespace CheckoutApi.IntegrationTests
 
             Assert.That(responseContent, Is.Not.Empty);
             Assert.That(responseContent, Does.Contain("{\"success\":true,"));
+        }
+
+        [Test]
+        public async Task BankRejection()
+        {
+            var payment = PaymentData.ValidPaymentRequest();
+            payment.NameOnCard = "Mr A fail";
+
+            var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString(payment));
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            Assert.That(responseContent, Is.Not.Empty);
+            Assert.That(responseContent, Does.Contain("{\"success\":false,"));
+        }
+
+        [Test]
+        public async Task PaymentDataWithoutNameIsNotAccepted()
+        {
+            var payment = PaymentData.ValidPaymentRequest();
+            payment.NameOnCard = string.Empty;
+
+            var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString(payment));
+
+            await HttpAssert.IsBadRequestWithJsonContent(response);
+        }
+
+        [Test]
+        public async Task PaymentDataWithInvalidCreditCardNumberIsNotAccepted()
+        {
+            var payment = PaymentData.ValidPaymentRequest();
+            payment.CardNumber = "nosuch";
+
+            var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString(payment));
+
+            await HttpAssert.IsBadRequestWithJsonContent(response);
         }
     }
 }

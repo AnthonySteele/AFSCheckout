@@ -23,7 +23,24 @@ namespace CheckoutApi.IntegrationTests
 
             var jsonData = JObject.Parse(responseContent);
             Assert.That(jsonData, Is.Not.Null);
+        }
 
+        public static async Task IsBadRequestWithJsonContent(HttpResponseMessage response)
+        {
+            if (response == null)
+            {
+                throw new ArgumentNullException(nameof(response));
+            }
+
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            Assert.That(responseContent, Is.Not.Empty);
+            Assert.That(responseContent, Does.Contain("One or more validation errors occurred."));
+
+            var jsonData = JObject.Parse(responseContent);
+            Assert.That(jsonData, Is.Not.Null);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace CheckoutApi.Repository
     {
         private readonly IDictionary<Guid, PaymentData> _data = new Dictionary<Guid, PaymentData>();
 
-        public PaymentData? Read(Guid id)
+        public PaymentData? GetPaymentById(Guid id)
         {
             if (_data.TryGetValue(id, out var item))
             {

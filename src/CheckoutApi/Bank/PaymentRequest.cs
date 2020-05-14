@@ -9,7 +9,7 @@ namespace CheckoutApi.Controllers
         public string NameOnCard { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(16, MinimumLength = 16)]
+        [CreditCard]
         public string CardNumber { get; set; } = string.Empty;
 
         [Required]

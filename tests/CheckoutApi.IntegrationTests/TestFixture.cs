@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace CheckoutApi.IntegrationTests
 {
     [SetUpFixture]
-    public sealed class TestFixture: IDisposable
+    public sealed class TestFixture : IDisposable
     {
         private static TestServerFixture? _server;
 

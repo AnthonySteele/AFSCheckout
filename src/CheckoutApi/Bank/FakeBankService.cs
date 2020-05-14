@@ -8,9 +8,16 @@ namespace CheckoutApi.Bank
     {
         public Task<BankResponse> ProcessPayment(PaymentRequest request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            var success = !request.NameOnCard.Contains("fail", StringComparison.OrdinalIgnoreCase);
+
             var result = new BankResponse
             {
-                Success = true,
+                Success = success,
                 TransactionId = Guid.NewGuid()
             };
 

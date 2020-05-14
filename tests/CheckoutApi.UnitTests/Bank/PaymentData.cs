@@ -1,6 +1,6 @@
 using CheckoutApi.Controllers;
 
-namespace CheckoutApi.IntegrationTests
+namespace CheckoutApi.UnitTests.Bank
 {
     public static class PaymentData
     {

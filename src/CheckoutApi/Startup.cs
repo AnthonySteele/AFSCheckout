@@ -20,6 +20,7 @@ namespace CheckoutApi
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IBankService, FakeBankService>();
+            services.AddTransient<IPaymentService, PaymentService>();
             services.AddSingleton<IPaymentRepository, FakePaymentRepository>();
 
             services.AddOpenApiDocument(config =>
