@@ -23,6 +23,7 @@ payment requests and accepting payment responses to and from the acquiring bank.
 * `PUT /payments`
 * `GET /swagger/` Swagger UI
 * `GET /swagger/v1/swagger.json` swagger data on endpoints
+* `GET /metrics`  metrics for Prometheus
 
 ## Other features
 
@@ -39,7 +40,7 @@ payment requests and accepting payment responses to and from the acquiring bank.
 
 ## Todo:
 
-Prometheus Monitoring
+Deeper into The bake Bank. How far to go?
 
 ## Shortcomings
 

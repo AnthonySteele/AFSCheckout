@@ -1,6 +1,5 @@
 using System.Net;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace CheckoutApi.IntegrationTests

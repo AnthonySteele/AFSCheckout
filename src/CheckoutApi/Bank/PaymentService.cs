@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CheckoutApi.Controllers;
 using CheckoutApi.Repository;
 using Microsoft.Extensions.Logging;
+using Prometheus;
 
 namespace CheckoutApi.Bank
 {
@@ -29,14 +30,17 @@ namespace CheckoutApi.Bank
                 throw new ArgumentNullException(nameof(request));
             }
 
+            CustomMetrics.PaymentStarted.Inc();
             _logger.LogInformation($"Payment request for {request.Amount} {request.Currency} recieved");
-            var response = await _bankService.ProcessPayment(request);
 
-            var statusString = response.Success ? "suceeed" : "failed";
-            _logger.LogInformation($"Transaction {response.TransactionId} {statusString}");
+            var response = await _bankService.ProcessPayment(request);
 
             var data = BuildPaymentData(request, response);
             _paymentRepository.Save(data);
+
+            var statusString = response.Success ? "success" : "fail";
+            _logger.LogInformation($"Transaction {response.TransactionId} {statusString}");
+            CustomMetrics.PaymentCompleted.WithLabels(statusString).Inc();
 
             return response;
         }
