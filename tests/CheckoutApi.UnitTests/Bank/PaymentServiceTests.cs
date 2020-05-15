@@ -61,7 +61,7 @@ namespace CheckoutApi.UnitTests.Bank
         }
 
         [Test]
-        public async Task RejectedPaymentReturnsDataFromrepository()
+        public async Task RejectedPaymentReturnsDataFromRepository()
         {
             var service = BuildPaymentService();
 
