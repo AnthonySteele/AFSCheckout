@@ -31,10 +31,9 @@ namespace CheckoutApi.IntegrationTests
         }
 
         [Test]
-        public async Task BankRejection()
+        public async Task BankRejectionHasCorrectStatus()
         {
-            var payment = PaymentRequestBuilder.ValidPaymentRequest();
-            payment.NameOnCard = "Mr A fail";
+            var payment = PaymentRequestBuilder.RequestToBeRejected();
 
             var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
 

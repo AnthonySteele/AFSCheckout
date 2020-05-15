@@ -42,9 +42,8 @@ namespace CheckoutApi.UnitTests.Repository
             var retrievedItem = repo.GetPaymentById(newItem.Id);
 
             Assert.That(retrievedItem!.Id, Is.EqualTo(newItem.Id));
-
             Assert.That(retrievedItem.Status, Is.EqualTo(PaymentStatus.Accepted));
-            Assert.That(retrievedItem!.BankTransactionId, Is.EqualTo(bankTransactionId));
+            Assert.That(retrievedItem.BankTransactionId, Is.EqualTo(bankTransactionId));
         }
 
         private static void AssertDataEqual(PaymentData? actual, PaymentData expected)

@@ -38,8 +38,7 @@ namespace CheckoutApi.UnitTests.Bank
         public async Task PaymentCanBeRejected()
         {
             var service = BuildPaymentService();
-            var request = PaymentRequestBuilder.ValidPaymentRequest();
-            request.NameOnCard = "Mr A Fail";
+            var request = PaymentRequestBuilder.RequestToBeRejected();
 
             var response = await service.ProcessPayment(request);
 
@@ -66,8 +65,7 @@ namespace CheckoutApi.UnitTests.Bank
         {
             var service = BuildPaymentService();
 
-            var request = PaymentRequestBuilder.ValidPaymentRequest();
-            request.NameOnCard = "Mr A Fail";
+            var request = PaymentRequestBuilder.RequestToBeRejected();
             var response = await service.ProcessPayment(request);
 
             var payment = service.GetPaymentById(response.Id);

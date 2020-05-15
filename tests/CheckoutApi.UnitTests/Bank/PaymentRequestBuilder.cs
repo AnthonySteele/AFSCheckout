@@ -17,5 +17,12 @@ namespace CheckoutApi.UnitTests.Bank
                 Amount = 100.0m
             };
         }
+
+        public static PaymentRequest RequestToBeRejected()
+        {
+            var request = ValidPaymentRequest();
+            request.NameOnCard = "Mr A Fail";
+            return request;
+        }
     }
 }

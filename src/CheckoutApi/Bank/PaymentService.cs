@@ -38,9 +38,9 @@ namespace CheckoutApi.Bank
             var bankResponse = await _bankService.ProcessPayment(request);
 
             var newStatus = bankResponse.Success ? PaymentStatus.Accepted : PaymentStatus.Rejected;
-            _paymentRepository.Update(paymentData.Id, bankResponse.TransactionId, newStatus);
+            var statusString = bankResponse.Success ? "accepted" : "rejected";
 
-            var statusString = bankResponse.Success ? "success" : "fail";
+            _paymentRepository.Update(paymentData.Id, bankResponse.TransactionId, newStatus);
             _logger.LogInformation($"Transaction {bankResponse.TransactionId} {statusString}");
             CustomMetrics.PaymentCompleted.WithLabels(statusString).Inc();
 
@@ -54,11 +54,16 @@ namespace CheckoutApi.Bank
                 Id = Guid.NewGuid(),
                 BankTransactionId = null,
                 Status = PaymentStatus.Received,
-                CardNumber = request.CardNumber.Substring(0, 4),
+                CardNumber = MaskedCardNumber(request.CardNumber),
                 NameOnCard = request.NameOnCard,
                 Amount = request.Amount,
                 Created = DateTimeOffset.UtcNow
             };
+        }
+
+        private static string MaskedCardNumber(string cardNumber)
+        {
+            return cardNumber.Substring(0, 4);
         }
 
         public PaymentData? GetPaymentById(Guid id)

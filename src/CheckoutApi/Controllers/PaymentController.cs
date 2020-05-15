@@ -20,7 +20,7 @@ namespace CheckoutApi.Controllers
         }
 
         [HttpPost]
-        [SwaggerResponse(HttpStatusCode.OK, typeof(BankResponse))]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(PaymentData))]
         [SwaggerResponse(HttpStatusCode.BadRequest, null)]
         public async Task<IActionResult> Post([FromBody]PaymentRequest request)
         {

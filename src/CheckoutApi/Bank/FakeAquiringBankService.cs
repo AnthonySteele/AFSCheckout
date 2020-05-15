@@ -13,15 +13,18 @@ namespace CheckoutApi.Bank
                 throw new ArgumentNullException(nameof(request));
             }
 
-            var success = !request.NameOnCard.Contains("fail", StringComparison.OrdinalIgnoreCase);
-
             var result = new BankResponse
             {
-                Success = success,
+                Success = FakePaymentSuccess(request),
                 TransactionId = Guid.NewGuid()
             };
 
             return Task.FromResult(result);
+        }
+
+        private static bool FakePaymentSuccess(PaymentRequest request)
+        {
+            return !request.NameOnCard.Contains("fail", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

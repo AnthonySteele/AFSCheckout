@@ -24,8 +24,7 @@ namespace CheckoutApi.UnitTests.Bank
         public async Task PaymentCanFail()
         {
             var bankService = new FakeAquiringBankService();
-            var payment = PaymentRequestBuilder.ValidPaymentRequest();
-            payment.NameOnCard = "Test A. Fail";
+            var payment = PaymentRequestBuilder.RequestToBeRejected();
 
             var result = await bankService.ProcessPayment(payment);
 

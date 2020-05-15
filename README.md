@@ -4,13 +4,8 @@ Api demo code for checkout.com
 
 ## Notes
 
-Assumptions have to be made around how the acquiring bank integration works. The spec is quite vague, even open-ended on this point. It looks as if this is to be stubbed in the Payment gateway: "We will be building the payment gateway _only_". but there is also: "Build a simulator to mock the responses from the bank"
+Assumptions have to be made around how the acquiring bank integration works. It looks as if this is to be stubbed in the Payment gateway: "We will be building the payment gateway _only_". 
 
-Not clear what "This component should be able to be switched out for a real bank once we move into production" means. Does it imply an out-of process mock?
-
-
-Payment gateway is "Responsible for validating requests, storing card information and forwarding
-payment requests and accepting payment responses to and from the acquiring bank."
 
 ## Running
 
@@ -39,12 +34,12 @@ The easiest way to work out how to use it is to run it and browse to `/swagger`
 * Unit tests, and Integration tests using `TestHost`
 * Build and test run on GitHub using Github Actions ( at https://github.com/AnthonySteele/AFSCheckout/actions ) and script in the repo at `\.github\workflows\build.yml`
 
-## Todo:
-
-The local data repo is also an in-memory fake.
-No auth or merchant id.
 
 ## Limitations of this app
+
+The local data repo is also an in-memory fake like the bank.
+
+No auth.
 
 I didn't want to overcomplicate the data models before it is needed, so there are some DTOs that are used as both view models and database models. In a a larger app these would be separated out as it grows.
 
@@ -55,9 +50,11 @@ The merchant will likely want to see a list of their recent transactions. This w
  * repo lookup method to get a list of transactions
  * A GET endpoint
 
-There is potential data loss if the bank API fails badly (e.g. timeout or HTTP 500 response) and we won't have a record in the local data store at that point.
+What happens when the bank API fails badly (e.g. timeout or HTTP 500 response). 
+We have a record in the local data store at that point, but that's all.
+
 Way to mitigate this likely involves:
- * Save the payment data locally _before_ sending it. This means using a locally generated id as key, not depending on the the transaction id that the bank returns.
+ * Save the payment data locally _before_ sending it (done). 
  * make use of an [Idempotency key](https://stripe.com/docs/api/idempotent_requests) to make it safe for a client to repeat failed requests by inspecting the saved data and deciding what to do.
  * maybe returning the ID to the client with a "bank unavailable" error message. There's no failure message yet.
  

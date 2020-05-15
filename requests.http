@@ -1,0 +1,26 @@
+# sample requests
+# I use VSCode and the REST client extension https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+# as it's much easier than Postman
+# but you can use other
+
+GET https://localhost:44361/health
+
+GET https://localhost:44361/swagger/v1/swagger.json
+
+GET https://localhost:44361/metrics
+
+POST https://localhost:44361/payment
+Content-Type: application/json 
+
+{
+    "nameOnCard": "Mr interactive Test",
+    "cardNumber": "4111111111111111",
+    "cardCvv": "123",
+    "cardExpiryMonth":  04,
+    "cardExpiryYear": 24,
+    "currency":"GBP",
+    "amount" : 234.0
+}
+
+# use the id from a successfull POST Above
+GET https://localhost:44361/payment/2ad82f83-af03-4523-98a2-b8b7fbc649f4
