@@ -17,14 +17,31 @@ namespace CheckoutApi.Repository
             return null;
         }
 
-        public void Save(PaymentData request)
+        public void Add(PaymentData request)
         {
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            _data[request.TransactionId] = request;
+            _data[request.Id] = request;
+        }
+
+        public void Update(Guid id, Guid bankTransactionId, PaymentStatus status)
+        {
+            var item = GetPaymentById(id);
+            if (item == null)
+            {
+                throw new ArgumentException("Cannot find item to update", nameof(id));
+            }
+
+            item.BankTransactionId = bankTransactionId;
+            item.Status = status;
+        }
+
+        public IEnumerable<PaymentData> AllData()
+        {
+            return _data.Values;
         }
     }
 }

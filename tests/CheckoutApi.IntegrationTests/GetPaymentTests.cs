@@ -49,7 +49,7 @@ namespace CheckoutApi.IntegrationTests
             var bankResponse = JsonConvert.DeserializeObject<PaymentData>(responseContent);
 
 
-            Assert.That(bankResponse.TransactionId, Is.EqualTo(paymentId));
+            Assert.That(bankResponse.Id, Is.EqualTo(paymentId));
             Assert.That(bankResponse.Amount, Is.EqualTo(paymentRequest.Amount));
             Assert.That(bankResponse.NameOnCard, Is.EqualTo(paymentRequest.NameOnCard));
             Assert.That(bankResponse.CardNumber, Is.EqualTo("4111"));
@@ -69,9 +69,9 @@ namespace CheckoutApi.IntegrationTests
 
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            var bankResponse = JsonConvert.DeserializeObject<BankResponse>(responseContent);
-            Assert.That(bankResponse, Is.Not.Null);
-            return bankResponse.TransactionId;
+            var paymentResponse = JsonConvert.DeserializeObject<PaymentData>(responseContent);
+            Assert.That(paymentResponse, Is.Not.Null);
+            return paymentResponse.Id;
         }
     }
 }

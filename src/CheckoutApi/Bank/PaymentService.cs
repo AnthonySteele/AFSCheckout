@@ -22,34 +22,38 @@ namespace CheckoutApi.Bank
             _logger = logger;
         }
 
-        public async Task<BankResponse> ProcessPayment(PaymentRequest request)
+        public async Task<PaymentData> ProcessPayment(PaymentRequest request)
         {
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
+            var paymentData = BuildPaymentData(request);
+            _paymentRepository.Add(paymentData);
+
             CustomMetrics.PaymentStarted.Inc();
-            _logger.LogInformation($"Payment request for {request.Amount} {request.Currency} recieved");
+            _logger.LogInformation($"Payment request for {request.Amount} {request.Currency} recieved and given id {paymentData.Id}");
 
-            var response = await _bankService.ProcessPayment(request);
+            var bankResponse = await _bankService.ProcessPayment(request);
 
-            var data = BuildPaymentData(request, response);
-            _paymentRepository.Save(data);
+            var newStatus = bankResponse.Success ? PaymentStatus.Accepted : PaymentStatus.Rejected;
+            _paymentRepository.Update(paymentData.Id, bankResponse.TransactionId, newStatus);
 
-            var statusString = response.Success ? "success" : "fail";
-            _logger.LogInformation($"Transaction {response.TransactionId} {statusString}");
+            var statusString = bankResponse.Success ? "success" : "fail";
+            _logger.LogInformation($"Transaction {bankResponse.TransactionId} {statusString}");
             CustomMetrics.PaymentCompleted.WithLabels(statusString).Inc();
 
-            return response;
+            return paymentData;
         }
 
-        private static PaymentData BuildPaymentData(PaymentRequest request, BankResponse response)
+        private static PaymentData BuildPaymentData(PaymentRequest request)
         {
             return new PaymentData
             {
-                TransactionId = response.TransactionId,
-                Status = response.Success ? PaymentStatus.Accepted : PaymentStatus.Rejected,
+                Id = Guid.NewGuid(),
+                BankTransactionId = null,
+                Status = PaymentStatus.Received,
                 CardNumber = request.CardNumber.Substring(0, 4),
                 NameOnCard = request.NameOnCard,
                 Amount = request.Amount,

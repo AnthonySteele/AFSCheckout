@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Converters;
 using Prometheus;
 
 namespace CheckoutApi
@@ -32,6 +33,7 @@ namespace CheckoutApi
 
             services
                 .AddMvc()
+                .AddNewtonsoftJson(opts => opts.SerializerSettings.Converters.Add(new StringEnumConverter()))
                 .AddControllersAsServices();
         }
 

@@ -48,6 +48,8 @@ No auth or merchant id.
 
 I didn't want to overcomplicate the data models before it is needed, so there are some DTOs that are used as both view models and database models. In a a larger app these would be separated out as it grows.
 
+Logging is very simple. I am using the framework `ILogger` as recommended, but I haven't paid attention to how it is configured in startup.
+
 The merchant will likely want to see a list of their recent transactions. This would means 
  * storing a merchant id on each transaction
  * repo lookup method to get a list of transactions

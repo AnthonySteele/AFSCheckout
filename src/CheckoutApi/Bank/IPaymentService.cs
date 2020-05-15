@@ -7,7 +7,7 @@ namespace CheckoutApi.Bank
 {
     public interface IPaymentService
     {
-        Task<BankResponse> ProcessPayment(PaymentRequest request);
+        Task<PaymentData> ProcessPayment(PaymentRequest request);
         PaymentData? GetPaymentById(Guid guidId);
     }
 }

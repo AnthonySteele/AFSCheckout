@@ -4,8 +4,9 @@ namespace CheckoutApi.Repository
 {
     public class PaymentData
     {
-        public Guid TransactionId { get; set; }
-        public string CardNumber { get; set; } = string.Empty;
+        public Guid Id { get; set; }
+        public Guid? BankTransactionId { get; set; }
+        public string CardNumber { get; set; } = string.Empty; 
         public string NameOnCard { get; set; } = string.Empty;
 
         public decimal Amount { get; set; }

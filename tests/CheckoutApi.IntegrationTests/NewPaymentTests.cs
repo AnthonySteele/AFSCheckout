@@ -1,6 +1,10 @@
+using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using CheckoutApi.IntegrationTests.Infrastructure;
+using CheckoutApi.Repository;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace CheckoutApi.IntegrationTests
@@ -22,12 +26,8 @@ namespace CheckoutApi.IntegrationTests
 
             var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
 
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-
-            Assert.That(responseContent, Is.Not.Empty);
-            Assert.That(responseContent, Does.Contain("{\"success\":true,"));
+            var paymentResponse = await ReadAsPaymentData(response);
+            Assert.That(paymentResponse.Status, Is.EqualTo(PaymentStatus.Accepted));
         }
 
         [Test]
@@ -38,11 +38,8 @@ namespace CheckoutApi.IntegrationTests
 
             var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
 
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-            var responseContent = await response.Content.ReadAsStringAsync();
-
-            Assert.That(responseContent, Is.Not.Empty);
-            Assert.That(responseContent, Does.Contain("{\"success\":false,"));
+            var paymentResponse = await ReadAsPaymentData(response);
+            Assert.That(paymentResponse.Status, Is.EqualTo(PaymentStatus.Rejected));
         }
 
         [Test]
@@ -76,17 +73,30 @@ namespace CheckoutApi.IntegrationTests
 
             var response = await TestFixture.Client.PostAsync("/payment", ContentHelpers.JsonString(payment));
 
-            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            var paymentResponse = await ReadAsPaymentData(response);
+            Assert.That(paymentResponse.Status, Is.EqualTo(PaymentStatus.Accepted));
         }
 
         [Test]
-        public async Task PutIsNotAccepted()
+        public async Task PutVerbIsNotAccepted()
         {
             var payment = PaymentRequestBuilder.ValidPaymentRequest();
 
             var response = await TestFixture.Client.PutAsync("/payment", ContentHelpers.JsonString(payment));
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed));
+        }
+
+        private static async Task<PaymentData> ReadAsPaymentData(HttpResponseMessage response)
+        {
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            Assert.That(responseContent, Is.Not.Empty);
+            var paymentResponse = JsonConvert.DeserializeObject<PaymentData>(responseContent);
+            Assert.That(paymentResponse, Is.Not.Null);
+            Assert.That(paymentResponse.Id, Is.Not.EqualTo(Guid.Empty));
+            return paymentResponse;
         }
     }
 }
